@@ -73,6 +73,13 @@ public sealed class NameModelLibrary
         if (model == null)
             throw new ArgumentNullException(nameof(model));
 
+        if (model.Order != Order)
+        {
+            throw new ArgumentException(
+                $"Model order '{model.Order}' does not match library order '{Order}'.",
+                nameof(model));
+        }
+
         if (!_models.TryGetValue(
                 normalisedCultureKey,
                 out Dictionary<string, MarkovNameModel>? categories))
@@ -216,5 +223,15 @@ public sealed class NameModelLibrary
         MarkovNameGenerator generator = CreateGenerator(cultureKey, categoryKey, seed);
 
         return generator.GenerateMany(count, options);
+    }
+
+    public void SaveToJson(string filePath)
+    {
+        Serialization.NameModelJsonSerializer.SaveLibrary(this, filePath);
+    }
+
+    public static NameModelLibrary LoadFromJson(string filePath)
+    {
+        return Serialization.NameModelJsonSerializer.LoadLibrary(filePath);
     }
 }

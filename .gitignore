@@ -83,3 +83,7 @@ publish/
 *.mdb
 *.opendb
 *.VC.db
+
+# Generated name model files
+*.namegen.json
+names-library.json

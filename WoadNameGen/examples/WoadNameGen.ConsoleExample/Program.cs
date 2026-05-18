@@ -1,4 +1,7 @@
-﻿using WoadNameGen;
+﻿using System.IO;
+using System.Linq;
+using WoadNameGen;
+using WoadNameGen.Serialization;
 
 string[] scottishPeople =
 {
@@ -167,3 +170,55 @@ string roman = library.Generate("roman", "people", seed: 12345, options);
 Console.WriteLine($"Scottish person: {person}");
 Console.WriteLine($"Scottish place: {place}");
 Console.WriteLine($"Roman person: {roman}");
+
+Console.WriteLine();
+Console.WriteLine("Saving library to JSON...");
+
+string outputPath = "names-library.json";
+
+NameModelJsonSerializer.SaveLibrary(library, outputPath);
+
+Console.WriteLine($"Saved to: {Path.GetFullPath(outputPath)}");
+
+Console.WriteLine();
+Console.WriteLine("Loading library from JSON...");
+
+NameModelLibrary loadedLibrary = NameModelJsonSerializer.LoadLibrary(outputPath);
+
+Console.WriteLine("Loaded library successfully.");
+
+Console.WriteLine();
+Console.WriteLine("Generated from loaded library:");
+
+IReadOnlyList<string> loadedNames = loadedLibrary.GenerateMany(
+    "scottish",
+    "people",
+    count: 10,
+    seed: 999,
+    options);
+
+foreach (string name in loadedNames)
+{
+    Console.WriteLine(name);
+}
+
+Console.WriteLine();
+Console.WriteLine("Determinism check:");
+
+IReadOnlyList<string> beforeSave = library.GenerateMany(
+    "roman",
+    "people",
+    count: 10,
+    seed: 123456,
+    options);
+
+IReadOnlyList<string> afterLoad = loadedLibrary.GenerateMany(
+    "roman",
+    "people",
+    count: 10,
+    seed: 123456,
+    options);
+
+bool same = beforeSave.SequenceEqual(afterLoad);
+
+Console.WriteLine($"Same before/after load: {same}");
