@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/examples/">
+    <Project Path="examples/WoadNameGen.ConsoleExample/WoadNameGen.ConsoleExample.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/WoadNameGen/WoadNameGen.csproj" />
+  </Folder>
+</Solution>
