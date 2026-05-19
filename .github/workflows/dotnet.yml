@@ -1,0 +1,63 @@
+name: .NET Build and Test
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - develop
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+
+jobs:
+  build-test-pack:
+    name: Build, Test, and Pack
+    runs-on: ubuntu-latest
+
+    env:
+      CONFIGURATION: Release
+      PACKAGE_OUTPUT: artifacts/packages
+      PROJECT_PATH: src/WoadStoat.MarkovNames/WoadStoat.MarkovNames.csproj
+      SOLUTION_PATH: WoadStoat.MarkovNames.sln
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            10.0.x
+            8.0.x
+
+      - name: Show .NET info
+        run: dotnet --info
+
+      - name: Restore solution
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
+
+      - name: Build solution
+        run: dotnet build ${{ env.SOLUTION_PATH }} --configuration ${{ env.CONFIGURATION }} --no-restore
+
+      - name: Run tests
+        run: dotnet test ${{ env.SOLUTION_PATH }} --configuration ${{ env.CONFIGURATION }} --no-build --verbosity normal
+
+      - name: Pack NuGet package
+        run: |
+          mkdir -p ${{ env.PACKAGE_OUTPUT }}
+          dotnet pack ${{ env.PROJECT_PATH }} \
+            --configuration ${{ env.CONFIGURATION }} \
+            --no-build \
+            --output ${{ env.PACKAGE_OUTPUT }}
+
+      - name: Upload NuGet package artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget-packages
+          path: |
+            artifacts/packages/*.nupkg
+            artifacts/packages/*.snupkg
