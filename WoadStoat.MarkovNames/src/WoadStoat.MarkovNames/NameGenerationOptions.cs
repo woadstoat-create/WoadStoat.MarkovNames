@@ -56,6 +56,12 @@ public sealed class NameGenerationOptions
     public bool UseGuidedSuffix { get; set; } = true;
 
     /// <summary>
+    /// Gets or sets how <see cref="RequiredSuffix"/> should be joined to a generated stem.
+    /// </summary>
+    public SuffixJoinMode SuffixJoinMode { get; set; } = SuffixJoinMode.MergeOverlappingSubstring;
+
+
+    /// <summary>
     /// Gets substrings that must not appear in generated names.
     /// </summary>
     public List<string> ForbiddenSubstrings { get; set; } = new List<string>();

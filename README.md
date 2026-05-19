@@ -284,6 +284,18 @@ NameGenerationOptions options = new NameGenerationOptions
 
 This is useful for Roman-style names, family names, faction naming conventions, and settlement naming rules.
 
+### Suffix Join Modes
+
+Required suffixes can be joined using different modes:
+
+```csharp
+NameGenerationOptions options = new NameGenerationOptions
+{
+    RequiredSuffix = "ius",
+    UseGuidedSuffix = true,
+    SuffixJoinMode = SuffixJoinMode.MergeOverlappingSubstring
+};
+
 ---
 
 ## Generation Filters

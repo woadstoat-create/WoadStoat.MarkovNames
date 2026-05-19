@@ -179,4 +179,35 @@ public sealed class MarkovNameGeneratorTests
             Assert.EndsWith("us", name, StringComparison.OrdinalIgnoreCase);
         }
     }
+
+    [Fact]
+    public void GuidedSuffixUsesConfiguredSuffixJoinMode()
+    {
+        string[] samples =
+        {
+            "Aureli",
+            "Marcu",
+            "Flav",
+            "Sever"
+        };
+
+        MarkovNameModel model = new MarkovNameTrainer(order: 2).Train(samples);
+        MarkovNameGenerator generator = new MarkovNameGenerator(model, seed: 10);
+
+        NameGenerationOptions options = new NameGenerationOptions
+        {
+            MinLength = 4,
+            MaxLength = 16,
+            AvoidTrainingDuplicates = false,
+            MaxAttempts = 1000,
+            RequiredSuffix = "ius",
+            UseGuidedSuffix = true,
+            SuffixJoinMode = SuffixJoinMode.MergeOverlappingSubstring
+        };
+
+        string name = generator.Generate(options);
+
+        Assert.EndsWith("ius", name, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("iius", name, StringComparison.OrdinalIgnoreCase);
+    }
 }

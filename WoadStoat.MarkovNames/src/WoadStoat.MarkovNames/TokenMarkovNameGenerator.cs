@@ -168,7 +168,10 @@ public sealed class TokenMarkovNameGenerator
         if (options.UseGuidedSuffix &&
             !string.IsNullOrWhiteSpace(options.RequiredSuffix))
         {
-            raw = AppendSuffixIfNeeded(raw, options.RequiredSuffix!);
+            raw = SuffixJoiner.Join(
+                raw,
+                options.RequiredSuffix!,
+                options.SuffixJoinMode);
         }
 
         return ApplyFormatting(raw, options);
@@ -228,27 +231,5 @@ public sealed class TokenMarkovNameGenerator
                 nameof(options.MaxConsecutiveIdenticalCharacters),
                 "MaxConsecutiveIdenticalCharacters must be at least 1 when set.");
         }
-    }
-
-    private static string AppendSuffixIfNeeded(string value, string suffix)
-    {
-        if (string.IsNullOrWhiteSpace(suffix))
-            return value;
-
-        string trimmedSuffix = suffix.Trim().ToLowerInvariant();
-
-        if (value.EndsWith(trimmedSuffix, StringComparison.OrdinalIgnoreCase))
-            return value;
-
-        if (value.Length > 0 && trimmedSuffix.Length > 0)
-        {
-            char lastValueChar = char.ToLowerInvariant(value[value.Length - 1]);
-            char firstSuffixChar = char.ToLowerInvariant(trimmedSuffix[0]);
-
-            if (lastValueChar == firstSuffixChar)
-                return value + trimmedSuffix.Substring(1);
-        }
-
-        return value + trimmedSuffix;
     }
 }

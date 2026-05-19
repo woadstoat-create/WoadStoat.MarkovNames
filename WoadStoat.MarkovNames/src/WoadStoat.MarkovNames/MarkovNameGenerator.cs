@@ -156,7 +156,10 @@ public sealed class MarkovNameGenerator
         if (options.UseGuidedSuffix &&
             !string.IsNullOrWhiteSpace(options.RequiredSuffix))
         {
-            result = AppendSuffixIfNeeded(result, options.RequiredSuffix!);
+            result = SuffixJoiner.Join(
+                result,
+                options.RequiredSuffix!,
+                options.SuffixJoinMode);
         }
 
         return ApplyFormatting(result, options);
@@ -353,27 +356,5 @@ public sealed class MarkovNameGenerator
             return padded.PadLeft(order, MarkovNameModel.StartToken);
 
         return padded.Substring(padded.Length - order, order);
-    }
-
-    private static string AppendSuffixIfNeeded(string value, string suffix)
-    {
-        if (string.IsNullOrWhiteSpace(suffix))
-            return value;
-
-        string trimmedSuffix = suffix.Trim().ToLowerInvariant();
-
-        if (value.EndsWith(trimmedSuffix, StringComparison.OrdinalIgnoreCase))
-            return value;
-
-        if (value.Length > 0 && trimmedSuffix.Length > 0)
-        {
-            char lastValueChar = char.ToLowerInvariant(value[value.Length - 1]);
-            char firstSuffixChar = char.ToLowerInvariant(trimmedSuffix[0]);
-
-            if (lastValueChar == firstSuffixChar)
-                return value + trimmedSuffix.Substring(1);
-        }
-
-        return value + trimmedSuffix;
     }
 }
