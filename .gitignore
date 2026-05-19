@@ -11,7 +11,6 @@ obj/
 *.rsuser
 *.suo
 *.userosscache
-*.sln.docstates
 project.lock.json
 project.assets.json
 artifacts/
@@ -75,7 +74,6 @@ publish/
 [Mm]emoryCaptures/
 *.csproj
 *.unityproj
-*.sln
 *.pidb
 *.booproj
 *.svd
