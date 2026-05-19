@@ -518,6 +518,26 @@ public sealed class WorldNameService
 
 ---
 
+## Installing a Local Package
+
+After packing the project locally, install it into another project with:
+
+```bash
+dotnet add package WoadStoat.WoadNameGen \
+  --version 0.1.0 \
+  --source /path/to/WoadNameGen/artifacts/packages
+```
+
+Example:
+
+```bash
+dotnet add package WoadStoat.WoadNameGen \
+  --version 0.1.0 \
+  --source /workspaces/WoadNameGen/WoadNameGen/artifacts/packages
+```
+
+---
+
 ## Running the Console Example
 
 ```bash
@@ -530,6 +550,103 @@ dotnet run --project examples/WoadNameGen.ConsoleExample
 
 ```bash
 dotnet test
+```
+
+---
+
+## Packing Locally
+
+Build and test:
+
+```bash
+dotnet clean
+dotnet build -c Release
+dotnet test -c Release
+```
+
+Create the package:
+
+```bash
+mkdir -p artifacts/packages
+dotnet pack src/WoadNameGen/WoadNameGen.csproj -c Release -o artifacts/packages
+```
+
+The package will be created under:
+
+```text
+artifacts/packages/
+```
+
+Expected files:
+
+```text
+WoadStoat.WoadNameGen.0.1.0.nupkg
+WoadStoat.WoadNameGen.0.1.0.snupkg
+```
+
+The `.nupkg` file is the actual NuGet package.
+
+The `.snupkg` file is the symbols package, useful for debugging.
+
+---
+
+## Testing the Package in a Fresh Project
+
+Create a test project:
+
+```bash
+mkdir WoadNameGenPackageTest
+cd WoadNameGenPackageTest
+dotnet new console
+```
+
+Install the local package:
+
+```bash
+dotnet add package WoadStoat.WoadNameGen \
+  --version 0.1.0 \
+  --source /path/to/WoadNameGen/artifacts/packages
+```
+
+Example test program:
+
+```csharp
+using WoadNameGen;
+
+string[] samples =
+{
+    "Aedan",
+    "Alasdair",
+    "Caelan",
+    "Duncan",
+    "Ewan",
+    "Fergus",
+    "Malcolm",
+    "Ruaridh"
+};
+
+MarkovNameModel model = new MarkovNameTrainer(order: 2).Train(samples);
+
+MarkovNameGenerator generator = new MarkovNameGenerator(model, seed: 12345);
+
+NameGenerationOptions options = new NameGenerationOptions
+{
+    MinLength = 4,
+    MaxLength = 12,
+    AvoidTrainingDuplicates = true,
+    MaxAttempts = 1000
+};
+
+for (int i = 0; i < 10; i++)
+{
+    Console.WriteLine(generator.Generate(options));
+}
+```
+
+Run:
+
+```bash
+dotnet run
 ```
 
 ---
@@ -554,8 +671,15 @@ WoadNameGen/
 ├── examples/
 │   └── WoadNameGen.ConsoleExample/
 │
-└── tests/
-    └── WoadNameGen.Tests/
+├── tests/
+│   └── WoadNameGen.Tests/
+│
+├── docs/
+│   ├── json-profile-format.md
+│   ├── tokenisation.md
+│   └── generation-options.md
+│
+└── samples/
 ```
 
 ---
@@ -614,6 +738,16 @@ factions: Red Company, Iron League
 
 ---
 
+## Documentation
+
+Additional documentation:
+
+- [JSON Profile Format](WoadNameGen/docs/json-profile-format.md)
+- [Tokenisation](WoadNameGen/docs/tokenisation.md)
+- [Generation Options](WoadNameGen/docs/generation-options.md)
+
+---
+
 ## Current Status
 
 WoadNameGen currently supports:
@@ -627,20 +761,12 @@ WoadNameGen currently supports:
 - generation filters
 - deterministic seeded generation
 - unit tests
+- local NuGet package generation
 
 Future improvements may include:
 
-- NuGet packaging
-- CI builds
-- sample culture packs
-- model serialisation for token-based libraries
+- GitHub Actions CI
+- token model serialisation
 - improved suffix generation
+- larger sample culture packs
 - Unity and MonoGame sample projects
-
-## Documentation
-
-Additional documentation:
-
-- [JSON Profile Format](WoadNameGen/docs/json-profile-format.md)
-- [Tokenisation](WoadNameGen/docs/tokenisation.md)
-- [Generation Options](WoadNameGen/docs/generation-options.md)

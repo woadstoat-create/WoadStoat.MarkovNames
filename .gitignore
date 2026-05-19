@@ -92,3 +92,8 @@ names-library.json
 TestResults/
 coverage/
 *.trx
+
+# Build/package artifacts
+artifacts/
+*.nupkg
+*.snupkg
