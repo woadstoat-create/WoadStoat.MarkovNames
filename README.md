@@ -484,6 +484,52 @@ string name = loaded.Generate(
     seed: 12345);
 ```
 
+## Unified High-Level API
+
+For most projects, the easiest entry point is `NameGeneratorLibrary`.
+
+It can load character-based and token-based profiles through one API.
+
+```csharp
+using WoadStoat.MarkovNames;
+
+NameGeneratorLibrary library =
+    NameGeneratorLibrary.FromProfileJson(profileJson);
+
+string name = library.Generate(
+    "gaelic",
+    "clans",
+    seed: 12345,
+    new NameGenerationOptions
+    {
+        MinLength = 5,
+        MaxLength = 16,
+        RequiredPrefix = "Mac",
+        UseGuidedPrefix = true
+    });
+```
+
+A profile set can contain both character and token models:
+
+```csharp
+NameGeneratorLibrary library =
+    NameGeneratorLibrary.FromProfileSetJson(profileSetJson);
+
+string roman = library.Generate("roman", "people", seed: 100);
+string clan = library.Generate("gaelic", "clans", seed: 200);
+```
+
+The lower-level APIs remain available when you need direct control:
+
+```text
+MarkovNameTrainer
+MarkovNameGenerator
+TokenMarkovNameTrainer
+TokenMarkovNameGenerator
+NameModelLibrary
+TokenNameModelLibrary
+```
+
 ## Unity Usage
 
 WoadStoat.MarkovNames does not depend on Unity.

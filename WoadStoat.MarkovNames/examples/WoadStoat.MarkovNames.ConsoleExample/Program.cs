@@ -613,3 +613,69 @@ foreach (string name in loadedTokenNames)
 {
     Console.WriteLine(name);
 }
+
+Console.WriteLine();
+Console.WriteLine("Unified high-level API example:");
+
+string unifiedJson = """
+{
+  "profiles": [
+    {
+      "cultureKey": "roman",
+      "order": 2,
+      "useTokens": false,
+      "categories": {
+        "people": ["Marcus", "Lucius", "Gaius", "Aurelius", "Cassius"]
+      }
+    },
+    {
+      "cultureKey": "gaelic",
+      "order": 2,
+      "useTokens": true,
+      "tokens": ["mac", "dh", "ch", "ae", "eo"],
+      "categories": {
+        "clans": ["MacLeod", "MacDonald", "MacKenzie", "MacGregor", "MacArthur"]
+      }
+    }
+  ]
+}
+""";
+
+NameGeneratorLibrary unifiedLibrary =
+    NameGeneratorLibrary.FromProfileSetJson(unifiedJson);
+
+Console.WriteLine("Roman people:");
+
+foreach (string name in unifiedLibrary.GenerateMany(
+             "roman",
+             "people",
+             count: 5,
+             seed: 100,
+             options))
+{
+    Console.WriteLine(name);
+}
+
+Console.WriteLine();
+
+Console.WriteLine("Gaelic clans:");
+
+NameGenerationOptions unifiedClanOptions = new NameGenerationOptions
+{
+    MinLength = 5,
+    MaxLength = 16,
+    AvoidTrainingDuplicates = true,
+    MaxAttempts = 1000,
+    RequiredPrefix = "Mac",
+    UseGuidedPrefix = true
+};
+
+foreach (string name in unifiedLibrary.GenerateMany(
+             "gaelic",
+             "clans",
+             count: 5,
+             seed: 200,
+             unifiedClanOptions))
+{
+    Console.WriteLine(name);
+}
