@@ -641,6 +641,6 @@ Future improvements may include:
 
 Additional documentation:
 
-- [JSON Profile Format](docs/json-profile-format.md)
-- [Tokenisation](docs/tokenisation.md)
-- [Generation Options](docs/generation-options.md)
+- [JSON Profile Format](WoadNameGen/docs/json-profile-format.md)
+- [Tokenisation](WoadNameGen/docs/tokenisation.md)
+- [Generation Options](WoadNameGen/docs/generation-options.md)
