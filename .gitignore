@@ -72,7 +72,6 @@ publish/
 [Ll]ogs/
 [Uu]ser[Ss]ettings/
 [Mm]emoryCaptures/
-*.csproj
 *.unityproj
 *.pidb
 *.booproj

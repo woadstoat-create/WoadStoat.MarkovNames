@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+
+    <AssemblyName>WoadStoat.MarkovNames</AssemblyName>
+    <RootNamespace>WoadStoat.MarkovNames</RootNamespace>
+    <PackageId>WoadStoat.MarkovNames</PackageId>
+    <Product>WoadStoat.MarkovNames</Product>
+    <Title>WoadStoat.MarkovNames</Title>
+
+    <!-- NuGet package metadata -->
+    <Version>0.1.0</Version>
+    <Authors>Woad Stoat Studios</Authors>
+    <Company>Woad Stoat Studios</Company>
+    <Description>
+      Engine-agnostic procedural name generation using Markov chains, token-based Markov models, culture profiles, JSON data files, guided generation, and validation filters.
+    </Description>
+    <PackageTags>procedural-generation;markov;names;gamedev;unity;monogame;procgen</PackageTags>
+    <PackageProjectUrl>https://github.com/woadstoat-create/WoadStoat.MarkovNames</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/woadstoat-create/WoadStoat.MarkovNames</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../../../README.md" Pack="true" PackagePath="/" />
+    <None Include="../../../LICENSE" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="10.0.8" />
+  </ItemGroup>
+
+</Project>
