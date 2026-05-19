@@ -5,4 +5,7 @@
   <Folder Name="/src/">
     <Project Path="src/WoadNameGen/WoadNameGen.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/WoadNameGen.Tests/WoadNameGen.Tests.csproj" />
+  </Folder>
 </Solution>

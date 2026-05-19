@@ -87,3 +87,8 @@ publish/
 # Generated name model files
 *.namegen.json
 names-library.json
+
+# Test results
+TestResults/
+coverage/
+*.trx
