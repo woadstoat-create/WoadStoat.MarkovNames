@@ -1,11 +1,21 @@
 namespace WoadStoat.MarkovNames;
 
+/// <summary>
+/// Tokenizer that matches the longest configured token at each position,
+/// falling back to single-character tokens when no custom token matches.
+/// </summary>
 public sealed class GreedyNameTokenizer : INameTokenizer
 {
     private readonly List<string> _tokens;
 
+    /// <summary>
+    /// Gets the configured tokens, ordered from longest to shortest.
+    /// </summary>
     public IReadOnlyList<string> Tokens => _tokens;
 
+    /// <summary>
+    /// Creates a greedy tokenizer from the supplied token list.
+    /// </summary>
     public GreedyNameTokenizer(IEnumerable<string> tokens)
     {
         if (tokens == null)

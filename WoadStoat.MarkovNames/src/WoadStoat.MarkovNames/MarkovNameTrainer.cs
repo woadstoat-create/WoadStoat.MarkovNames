@@ -1,9 +1,21 @@
 namespace WoadStoat.MarkovNames;
 
+/// <summary>
+/// Trains character-based Markov name models from sample names.
+/// </summary>
 public sealed class MarkovNameTrainer
 {
+    /// <summary>
+    /// Gets the Markov order used by this trainer.
+    /// </summary>
     public int Order { get; }
 
+    /// <summary>
+    /// Creates a new character-based Markov name trainer.
+    /// </summary>
+    /// <param name="order">
+    /// The Markov order. Higher values produce names closer to the training data.
+    /// </param>
     public MarkovNameTrainer(int order = 2)
     {
         if (order < 1)
@@ -12,6 +24,13 @@ public sealed class MarkovNameTrainer
         Order = order;
     }
 
+    /// <summary>
+    /// Trains a character-based Markov model from the supplied samples.
+    /// </summary>
+    /// <param name="samples">The training samples.</param>
+    /// <returns>A trained Markov name model.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="samples"/> is null.</exception>
+    /// <exception cref="ArgumentException">Thrown when no valid samples are supplied.</exception>
     public MarkovNameModel Train(IEnumerable<string> samples)
     {
         if (samples == null)

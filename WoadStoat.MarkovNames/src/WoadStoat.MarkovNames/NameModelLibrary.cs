@@ -4,12 +4,21 @@ using System.Linq;
 
 namespace WoadStoat.MarkovNames;
 
+/// <summary>
+/// Stores trained character-based Markov models by culture and category key.
+/// </summary>
 public sealed class NameModelLibrary
 {
     private readonly Dictionary<string, Dictionary<string, MarkovNameModel>> _models;
 
+    /// <summary>
+    /// Gets the Markov order shared by all models in this library.
+    /// </summary>
     public int Order { get; }
 
+    /// <summary>
+    /// Gets the available culture keys.
+    /// </summary>
     public IReadOnlyCollection<string> CultureKeys => _models.Keys.ToList();
 
     public NameModelLibrary(int order = 2)
@@ -23,6 +32,9 @@ public sealed class NameModelLibrary
             StringComparer.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// Trains a model library from a single culture profile.
+    /// </summary>
     public static NameModelLibrary Train(NameCultureProfile profile, int order = 2)
     {
         NameModelLibrary library = new NameModelLibrary(order);
@@ -157,6 +169,9 @@ public sealed class NameModelLibrary
         return new MarkovNameGenerator(model);
     }
 
+    /// <summary>
+    /// Creates a generator for a specific culture and category.
+    /// </summary>
     public MarkovNameGenerator CreateGenerator(
         string cultureKey,
         string categoryKey,

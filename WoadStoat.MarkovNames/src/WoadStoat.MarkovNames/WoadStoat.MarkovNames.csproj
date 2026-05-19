@@ -8,6 +8,10 @@
 
     <AssemblyName>WoadStoat.MarkovNames</AssemblyName>
     <RootNamespace>WoadStoat.MarkovNames</RootNamespace>
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
+
     <PackageId>WoadStoat.MarkovNames</PackageId>
     <Product>WoadStoat.MarkovNames</Product>
     <Title>WoadStoat.MarkovNames</Title>

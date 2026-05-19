@@ -1,11 +1,24 @@
 namespace WoadStoat.MarkovNames;
 
+/// <summary>
+/// Trains token-based Markov name models from sample names.
+/// </summary>
 public sealed class TokenMarkovNameTrainer
 {
     private readonly INameTokenizer _tokenizer;
 
+    /// <summary>
+    /// Gets the Markov order used by this trainer.
+    /// </summary>
     public int Order { get; }
 
+    /// <summary>
+    /// Creates a token-based Markov trainer.
+    /// </summary>
+    /// <param name="order">The Markov order.</param>
+    /// <param name="tokenizer">
+    /// The tokenizer used to split samples. If null, a character tokenizer is used.
+    /// </param>
     public TokenMarkovNameTrainer(
         int order = 2,
         INameTokenizer? tokenizer = null)

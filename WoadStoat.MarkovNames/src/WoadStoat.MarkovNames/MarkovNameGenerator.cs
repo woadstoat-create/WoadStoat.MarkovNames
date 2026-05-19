@@ -5,32 +5,53 @@ using System.Text;
 
 namespace WoadStoat.MarkovNames;
 
+/// <summary>
+/// Generates names from a trained character-based Markov model.
+/// </summary>
 public sealed class MarkovNameGenerator
 {
     private readonly MarkovNameModel _model;
     private readonly IRandomSource _random;
 
+    /// <summary>
+    /// Creates a generator using a non-deterministic random source.
+    /// </summary>
     public MarkovNameGenerator(MarkovNameModel model)
         : this(model, new SystemRandomSource())
     {
     }
 
+    /// <summary>
+    /// Creates a generator using a deterministic integer seed.
+    /// </summary>
     public MarkovNameGenerator(MarkovNameModel model, int seed)
         : this(model, new SystemRandomSource(seed))
     {
     }
 
+    /// <summary>
+    /// Creates a generator using a custom random source.
+    /// </summary>
     public MarkovNameGenerator(MarkovNameModel model, IRandomSource random)
     {
         _model = model ?? throw new ArgumentNullException(nameof(model));
         _random = random ?? throw new ArgumentNullException(nameof(random));
     }
 
+    /// <summary>
+    /// Generates a single name using default generation options.
+    /// </summary>
     public string Generate()
     {
         return Generate(new NameGenerationOptions());
     }
 
+    /// <summary>
+    /// Generates a single name using the supplied options.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when no valid name can be generated within the configured attempt limit.
+    /// </exception>
     public string Generate(NameGenerationOptions options)
     {
         ValidateOptions(options);
@@ -50,6 +71,9 @@ public sealed class MarkovNameGenerator
             "Try relaxing length constraints, increasing MaxAttempts, or allowing training duplicates.");
     }
 
+    /// <summary>
+    /// Generates multiple unique names using the supplied options.
+    /// </summary>
     public IReadOnlyList<string> GenerateMany(
         int count,
         NameGenerationOptions? options = null)

@@ -3,14 +3,26 @@ using System.Collections.Generic;
 
 namespace WoadStoat.MarkovNames;
 
+/// <summary>
+/// Defines a culture or language profile made up of named training categories.
+/// </summary>
 public sealed class NameCultureProfile
 {
     private readonly Dictionary<string, NameCategory> _categories;
 
+    /// <summary>
+    /// Gets the normalised culture key.
+    /// </summary>
     public string CultureKey { get; }
 
+    /// <summary>
+    /// Gets the categories registered on this culture profile.
+    /// </summary>
     public IReadOnlyDictionary<string, NameCategory> Categories => _categories;
 
+    /// <summary>
+    /// Creates a new culture profile.
+    /// </summary>
     public NameCultureProfile(string cultureKey)
     {
         CultureKey = NameKey.Normalise(cultureKey, nameof(cultureKey));
@@ -19,6 +31,9 @@ public sealed class NameCultureProfile
             StringComparer.OrdinalIgnoreCase);
     }
 
+    /// <summary>
+    /// Adds or replaces a category on this culture profile.
+    /// </summary>
     public NameCultureProfile AddCategory(
         string categoryKey,
         IEnumerable<string> samples)
