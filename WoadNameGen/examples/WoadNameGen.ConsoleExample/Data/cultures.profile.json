@@ -1,0 +1,24 @@
+{
+  "profiles": [
+    {
+      "cultureKey": "gaelic",
+      "order": 2,
+      "useTokens": true,
+      "tokens": ["mac", "mh", "dh", "ch", "gh", "ae", "eo", "ai"],
+      "categories": {
+        "people": ["Aedan", "Caelan", "Eoghan", "Ruairidh"],
+        "clans": ["MacLeod", "MacDonald", "MacKenzie", "MacGregor"]
+      }
+    },
+    {
+      "cultureKey": "roman",
+      "order": 2,
+      "useTokens": true,
+      "tokens": ["us", "ius", "ian", "ae", "au", "qu"],
+      "categories": {
+        "people": ["Marcus", "Lucius", "Gaius", "Titus", "Aurelius"],
+        "places": ["Roma", "Capua", "Ostia", "Ravenna"]
+      }
+    }
+  ]
+}

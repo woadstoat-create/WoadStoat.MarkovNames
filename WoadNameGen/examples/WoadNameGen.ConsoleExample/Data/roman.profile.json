@@ -1,0 +1,43 @@
+{
+  "cultureKey": "roman",
+  "order": 2,
+  "useTokens": true,
+  "tokens": [
+    "us",
+    "ius",
+    "ian",
+    "ae",
+    "au",
+    "qu",
+    "um"
+  ],
+  "categories": {
+    "people": [
+      "Marcus",
+      "Lucius",
+      "Gaius",
+      "Titus",
+      "Quintus",
+      "Cassius",
+      "Aurelius",
+      "Octavius",
+      "Valerius",
+      "Julius",
+      "Flavius",
+      "Severus"
+    ],
+    "places": [
+      "Roma",
+      "Capua",
+      "Ostia",
+      "Ravenna",
+      "Mediolanum",
+      "Pompeii",
+      "Neapolis",
+      "Aquileia",
+      "Lugdunum",
+      "Massilia",
+      "Ariminum"
+    ]
+  }
+}

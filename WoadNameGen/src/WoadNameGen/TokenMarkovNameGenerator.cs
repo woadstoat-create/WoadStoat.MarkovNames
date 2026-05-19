@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace WoadNameGen;
 
 public sealed class TokenMarkovNameGenerator
@@ -93,6 +95,10 @@ public sealed class TokenMarkovNameGenerator
 
     private string GenerateSingle(NameGenerationOptions options)
     {
+        bool useGuidedPrefix =
+            options.UseGuidedPrefix &&
+            !string.IsNullOrWhiteSpace(options.RequiredPrefix);
+
         List<string> state = new List<string>();
 
         for (int i = 0; i < _model.Order; i++)
@@ -101,6 +107,31 @@ public sealed class TokenMarkovNameGenerator
         }
 
         List<string> outputTokens = new List<string>();
+
+        if (useGuidedPrefix)
+        {
+            IReadOnlyList<string> prefixTokens =
+                _model.Tokenizer.Tokenize(options.RequiredPrefix!.Trim().ToLowerInvariant());
+
+            outputTokens.AddRange(prefixTokens);
+
+            List<string> paddedPrefixState = new List<string>();
+
+            for (int i = 0; i < _model.Order; i++)
+            {
+                paddedPrefixState.Add(TokenMarkovNameModel.StartToken);
+            }
+
+            paddedPrefixState.AddRange(prefixTokens);
+
+            state = paddedPrefixState
+                .Skip(Math.Max(0, paddedPrefixState.Count - _model.Order))
+                .Take(_model.Order)
+                .ToList();
+
+            if (!_model.TryGetTransitions(state, out _))
+                return string.Empty;
+        }
 
         int safetyLimit = Math.Max(16, options.MaxLength * 4);
         int steps = 0;
@@ -133,6 +164,12 @@ public sealed class TokenMarkovNameGenerator
         }
 
         string raw = _model.Tokenizer.JoinTokens(outputTokens);
+
+        if (options.UseGuidedSuffix &&
+            !string.IsNullOrWhiteSpace(options.RequiredSuffix))
+        {
+            raw = AppendSuffixIfNeeded(raw, options.RequiredSuffix!);
+        }
 
         return ApplyFormatting(raw, options);
     }
@@ -191,5 +228,27 @@ public sealed class TokenMarkovNameGenerator
                 nameof(options.MaxConsecutiveIdenticalCharacters),
                 "MaxConsecutiveIdenticalCharacters must be at least 1 when set.");
         }
+    }
+
+    private static string AppendSuffixIfNeeded(string value, string suffix)
+    {
+        if (string.IsNullOrWhiteSpace(suffix))
+            return value;
+
+        string trimmedSuffix = suffix.Trim().ToLowerInvariant();
+
+        if (value.EndsWith(trimmedSuffix, StringComparison.OrdinalIgnoreCase))
+            return value;
+
+        if (value.Length > 0 && trimmedSuffix.Length > 0)
+        {
+            char lastValueChar = char.ToLowerInvariant(value[value.Length - 1]);
+            char firstSuffixChar = char.ToLowerInvariant(trimmedSuffix[0]);
+
+            if (lastValueChar == firstSuffixChar)
+                return value + trimmedSuffix.Substring(1);
+        }
+
+        return value + trimmedSuffix;
     }
 }

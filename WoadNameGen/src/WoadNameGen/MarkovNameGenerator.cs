@@ -91,8 +91,22 @@ public sealed class MarkovNameGenerator
 
     private string GenerateSingle(NameGenerationOptions options)
     {
-        string state = new string(MarkovNameModel.StartToken, _model.Order);
-        StringBuilder builder = new StringBuilder();
+        bool useGuidedPrefix =
+            options.UseGuidedPrefix &&
+            !string.IsNullOrWhiteSpace(options.RequiredPrefix);
+
+        string rawPrefix = useGuidedPrefix
+            ? options.RequiredPrefix!.Trim().ToLowerInvariant()
+            : string.Empty;
+
+        StringBuilder builder = new StringBuilder(rawPrefix);
+
+        string state = useGuidedPrefix
+            ? BuildStateFromPrefix(rawPrefix, _model.Order)
+            : new string(MarkovNameModel.StartToken, _model.Order);
+
+        if (useGuidedPrefix && !_model.TryGetTransitions(state, out _))
+            return string.Empty;
 
         while (builder.Length < options.MaxLength)
         {
@@ -113,7 +127,15 @@ public sealed class MarkovNameGenerator
             state = state.Substring(1) + next;
         }
 
-        return ApplyFormatting(builder.ToString(), options);
+        string result = builder.ToString();
+
+        if (options.UseGuidedSuffix &&
+            !string.IsNullOrWhiteSpace(options.RequiredSuffix))
+        {
+            result = AppendSuffixIfNeeded(result, options.RequiredSuffix!);
+        }
+
+        return ApplyFormatting(result, options);
     }
 
     private bool IsCandidateValid(string candidate, NameGenerationOptions options)
@@ -294,5 +316,40 @@ public sealed class MarkovNameGenerator
                 nameof(options.MaxConsecutiveIdenticalCharacters),
                 "MaxConsecutiveIdenticalCharacters must be at least 1 when set.");
         }
+    }
+
+    private static string BuildStateFromPrefix(string prefix, int order)
+    {
+        if (string.IsNullOrEmpty(prefix))
+            return new string(MarkovNameModel.StartToken, order);
+
+        string padded = new string(MarkovNameModel.StartToken, order) + prefix;
+
+        if (padded.Length <= order)
+            return padded.PadLeft(order, MarkovNameModel.StartToken);
+
+        return padded.Substring(padded.Length - order, order);
+    }
+
+    private static string AppendSuffixIfNeeded(string value, string suffix)
+    {
+        if (string.IsNullOrWhiteSpace(suffix))
+            return value;
+
+        string trimmedSuffix = suffix.Trim().ToLowerInvariant();
+
+        if (value.EndsWith(trimmedSuffix, StringComparison.OrdinalIgnoreCase))
+            return value;
+
+        if (value.Length > 0 && trimmedSuffix.Length > 0)
+        {
+            char lastValueChar = char.ToLowerInvariant(value[value.Length - 1]);
+            char firstSuffixChar = char.ToLowerInvariant(trimmedSuffix[0]);
+
+            if (lastValueChar == firstSuffixChar)
+                return value + trimmedSuffix.Substring(1);
+        }
+
+        return value + trimmedSuffix;
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using WoadNameGen;
 using WoadNameGen.Serialization;
@@ -414,4 +415,180 @@ IReadOnlyList<string> characterNames = characterGenerator.GenerateMany(
 foreach (string name in characterNames)
 {
     Console.WriteLine(name);
+}
+
+Console.WriteLine();
+Console.WriteLine("Guided prefix example: Scottish clan names beginning with Mac");
+
+NameGenerationOptions macOptions = new NameGenerationOptions
+{
+    MinLength = 5,
+    MaxLength = 14,
+    MaxAttempts = 500,
+    AvoidTrainingDuplicates = true,
+    RequiredPrefix = "Mac",
+    UseGuidedPrefix = true,
+    MaxConsecutiveIdenticalCharacters = 2
+};
+
+IReadOnlyList<string> macNames = library.GenerateMany(
+    "scottish",
+    "clans",
+    count: 10,
+    seed: 4242,
+    macOptions);
+
+foreach (string name in macNames)
+{
+    Console.WriteLine(name);
+}
+
+Console.WriteLine();
+Console.WriteLine("Guided suffix example: Roman-style names ending in us");
+
+NameGenerationOptions romanSuffixOptions = new NameGenerationOptions
+{
+    MinLength = 5,
+    MaxLength = 14,
+    MaxAttempts = 500,
+    AvoidTrainingDuplicates = true,
+    RequiredSuffix = "us",
+    UseGuidedSuffix = true,
+    MaxConsecutiveIdenticalCharacters = 2
+};
+
+IReadOnlyList<string> romanUsNames = library.GenerateMany(
+    "roman",
+    "people",
+    count: 10,
+    seed: 5151,
+    romanSuffixOptions);
+
+foreach (string name in romanUsNames)
+{
+    Console.WriteLine(name);
+}
+
+Console.WriteLine();
+Console.WriteLine("Token-based guided prefix example:");
+
+NameGenerationOptions tokenPrefixOptions = new NameGenerationOptions
+{
+    MinLength = 5,
+    MaxLength = 14,
+    MaxAttempts = 1000,
+    AvoidTrainingDuplicates = true,
+    RequiredPrefix = "Mac",
+    UseGuidedPrefix = true,
+    MaxConsecutiveIdenticalCharacters = 2
+};
+
+IReadOnlyList<string> tokenMacNames = tokenGenerator.GenerateMany(
+    count: 10,
+    options: tokenPrefixOptions);
+
+foreach (string name in tokenMacNames)
+{
+    Console.WriteLine(name);
+}
+
+Console.WriteLine();
+Console.WriteLine("Data-file culture profile example:");
+
+string dataDirectory = Path.Combine(AppContext.BaseDirectory, "Data");
+string gaelicProfilePath = Path.Combine(dataDirectory, "gaelic.profile.json");
+string romanProfilePath = Path.Combine(dataDirectory, "roman.profile.json");
+
+TokenNameModelLibrary gaelicTokenLibrary =
+    NameCultureProfileJsonLoader.TrainTokenLibraryFromProfileFile(gaelicProfilePath);
+
+TokenNameModelLibrary romanTokenLibrary =
+    NameCultureProfileJsonLoader.TrainTokenLibraryFromProfileFile(romanProfilePath);
+
+NameGenerationOptions dataFileOptions = new NameGenerationOptions
+{
+    MinLength = 4,
+    MaxLength = 14,
+    MaxAttempts = 1000,
+    AvoidTrainingDuplicates = true,
+    MaxConsecutiveIdenticalCharacters = 2
+};
+
+Console.WriteLine();
+Console.WriteLine("Gaelic people from JSON:");
+
+foreach (string name in gaelicTokenLibrary.GenerateMany(
+             "gaelic",
+             "people",
+             count: 10,
+             seed: 1001,
+             dataFileOptions))
+{
+    Console.WriteLine(name);
+}
+
+Console.WriteLine();
+Console.WriteLine("Gaelic clans from JSON, guided prefix Mac:");
+
+NameGenerationOptions macDataFileOptions = new NameGenerationOptions
+{
+    MinLength = 5,
+    MaxLength = 16,
+    MaxAttempts = 1000,
+    AvoidTrainingDuplicates = true,
+    RequiredPrefix = "Mac",
+    UseGuidedPrefix = true,
+    MaxConsecutiveIdenticalCharacters = 2
+};
+
+foreach (string name in gaelicTokenLibrary.GenerateMany(
+             "gaelic",
+             "clans",
+             count: 10,
+             seed: 1002,
+             macDataFileOptions))
+{
+    Console.WriteLine(name);
+}
+
+Console.WriteLine();
+Console.WriteLine("Roman people from JSON, guided suffix us:");
+
+NameGenerationOptions romanDataFileOptions = new NameGenerationOptions
+{
+    MinLength = 5,
+    MaxLength = 14,
+    MaxAttempts = 1000,
+    AvoidTrainingDuplicates = true,
+    RequiredSuffix = "us",
+    UseGuidedSuffix = true,
+    MaxConsecutiveIdenticalCharacters = 2
+};
+
+foreach (string name in romanTokenLibrary.GenerateMany(
+             "roman",
+             "people",
+             count: 10,
+             seed: 1003,
+             romanDataFileOptions))
+{
+    Console.WriteLine(name);
+}
+
+Console.WriteLine();
+Console.WriteLine("Multi-culture JSON profile set:");
+
+string profileSetPath = Path.Combine(dataDirectory, "cultures.profile-set.json");
+
+TokenNameModelLibrary profileSetLibrary =
+    NameCultureProfileJsonLoader.TrainTokenLibraryFromProfileSetFile(profileSetPath);
+
+foreach (string cultureKey in profileSetLibrary.CultureKeys)
+{
+    Console.WriteLine($"Culture: {cultureKey}");
+
+    foreach (string categoryKey in profileSetLibrary.GetCategoryKeys(cultureKey))
+    {
+        Console.WriteLine($"  Category: {categoryKey}");
+    }
 }
