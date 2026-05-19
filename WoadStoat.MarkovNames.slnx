@@ -1,11 +1,11 @@
 <Solution>
   <Folder Name="/examples/">
-    <Project Path="examples/WoadStoat.MarkovNames.ConsoleExample/WoadStoat.MarkovNames.ConsoleExample.csproj" />
+    <Project Path="WoadStoat.MarkovNames/examples/WoadStoat.MarkovNames.ConsoleExample/WoadStoat.MarkovNames.ConsoleExample.csproj" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/WoadStoat.MarkovNames/WoadStoat.MarkovNames.csproj" />
   </Folder>
   <Folder Name="/tests/">
-    <Project Path="tests/WoadStoat.MarkovNames.Tests/WoadStoat.MarkovNames.Tests.csproj" />
+    <Project Path="WoadStoat.MarkovNames/tests/WoadStoat.MarkovNames.Tests/WoadStoat.MarkovNames.Tests.csproj" />
   </Folder>
 </Solution>
