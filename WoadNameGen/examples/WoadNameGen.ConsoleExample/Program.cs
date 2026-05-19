@@ -111,8 +111,15 @@ NameGenerationOptions options = new NameGenerationOptions
 {
     MinLength = 4,
     MaxLength = 12,
-    AvoidTrainingDuplicates = true
+    AvoidTrainingDuplicates = true,
+    MaxAttempts = 250,
+    MaxConsecutiveIdenticalCharacters = 2
 };
+
+options.ForbiddenSubstrings.Add("xxx");
+options.ForbiddenSubstrings.Add("qq");
+options.ForbiddenCharacters.Add('$');
+options.ForbiddenCharacters.Add('^');
 
 Console.WriteLine("Cultures:");
 foreach (string cultureKey in library.CultureKeys)
@@ -222,3 +229,106 @@ IReadOnlyList<string> afterLoad = loadedLibrary.GenerateMany(
 bool same = beforeSave.SequenceEqual(afterLoad);
 
 Console.WriteLine($"Same before/after load: {same}");
+
+Console.WriteLine();
+Console.WriteLine("Filtered Scottish place names:");
+
+NameGenerationOptions placeOptions = new NameGenerationOptions
+{
+    MinLength = 5,
+    MaxLength = 14,
+    AvoidTrainingDuplicates = true,
+    MaxAttempts = 500,
+    MaxConsecutiveIdenticalCharacters = 2
+};
+
+placeOptions.ForbiddenSubstrings.Add("ii");
+placeOptions.ForbiddenSubstrings.Add("uu");
+
+IReadOnlyList<string> filteredPlaces = library.GenerateMany(
+    "scottish",
+    "places",
+    count: 10,
+    seed: 777,
+    placeOptions);
+
+foreach (string p in filteredPlaces)
+{
+    Console.WriteLine(p);
+}
+
+Console.WriteLine();
+Console.WriteLine("Roman names that do not end with 'us':");
+
+NameGenerationOptions romanOptions = new NameGenerationOptions
+{
+    MinLength = 4,
+    MaxLength = 12,
+    AvoidTrainingDuplicates = true,
+    MaxAttempts = 1000,
+    CustomValidator = name => !name.EndsWith("us", StringComparison.OrdinalIgnoreCase)
+};
+
+IReadOnlyList<string> filteredRomanNames = library.GenerateMany(
+    "roman",
+    "people",
+    count: 10,
+    seed: 888,
+    romanOptions);
+
+foreach (string name in filteredRomanNames)
+{
+    Console.WriteLine(name);
+}
+
+Console.WriteLine();
+Console.WriteLine("Names starting with 'Ma':");
+
+NameGenerationOptions prefixOptions = new NameGenerationOptions
+{
+    MinLength = 4,
+    MaxLength = 12,
+    AvoidTrainingDuplicates = false,
+    MaxAttempts = 2000,
+    RequiredPrefix = "Ma"
+};
+
+IReadOnlyList<string> prefixedNames = library.GenerateMany(
+    "scottish",
+    "people",
+    count: 5,
+    seed: 999,
+    prefixOptions);
+
+foreach (string name in prefixedNames)
+{
+    Console.WriteLine(name);
+}
+
+Console.WriteLine();
+Console.WriteLine("Scottish names using restricted character set:");
+
+NameGenerationOptions restrictedAlphabetOptions = new NameGenerationOptions
+{
+    MinLength = 4,
+    MaxLength = 12,
+    AvoidTrainingDuplicates = true,
+    MaxAttempts = 1000
+};
+
+foreach (char c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+{
+    restrictedAlphabetOptions.AllowedCharacters.Add(c);
+}
+
+IReadOnlyList<string> restrictedNames = library.GenerateMany(
+    "scottish",
+    "people",
+    count: 10,
+    seed: 1234,
+    restrictedAlphabetOptions);
+
+foreach (string name in restrictedNames)
+{
+    Console.WriteLine(name);
+}

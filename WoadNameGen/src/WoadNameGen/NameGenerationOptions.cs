@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace WoadNameGen;
 
 public sealed class NameGenerationOptions
@@ -13,4 +16,30 @@ public sealed class NameGenerationOptions
     public bool CapitaliseFirstLetter { get; set; } = true;
 
     public bool LowercaseRest { get; set; } = true;
+
+    public string? RequiredPrefix { get; set; }
+
+    public string? RequiredSuffix { get; set; }
+
+    public List<string> ForbiddenSubstrings { get; set; } = new List<string>();
+
+    public List<char> ForbiddenCharacters { get; set; } = new List<char>();
+
+    /// <summary>
+    /// If empty, all characters are allowed.
+    /// If populated, generated names may only contain these characters.
+    /// </summary>
+    public List<char> AllowedCharacters { get; set; } = new List<char>();
+
+    /// <summary>
+    /// Example: value of 2 allows "ll" but rejects "lll".
+    /// Null means no limit.
+    /// </summary>
+    public int? MaxConsecutiveIdenticalCharacters { get; set; }
+
+    /// <summary>
+    /// Optional final validation hook.
+    /// Return true to accept the candidate, false to reject it.
+    /// </summary>
+    public Func<string, bool>? CustomValidator { get; set; }
 }
