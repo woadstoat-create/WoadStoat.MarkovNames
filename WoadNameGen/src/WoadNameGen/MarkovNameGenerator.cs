@@ -39,7 +39,7 @@ public sealed class MarkovNameGenerator
         {
             string candidate = GenerateSingle(options);
 
-            if (!IsCandidateValid(candidate, options))
+            if (!NameCandidateValidator.IsValid(candidate, options, _model.WasInTrainingData))
                 continue;
 
             return candidate;

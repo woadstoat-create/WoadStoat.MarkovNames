@@ -332,3 +332,86 @@ foreach (string name in restrictedNames)
 {
     Console.WriteLine(name);
 }
+
+Console.WriteLine();
+Console.WriteLine("Token-based Gaelic-style names:");
+
+string[] gaelicInspiredNames =
+{
+    "MacLeod",
+    "MacDonald",
+    "MacKenzie",
+    "MacGregor",
+    "MacArthur",
+    "MacNab",
+    "Aedan",
+    "Caelan",
+    "Eoghan",
+    "Ruairidh",
+    "Fionnlagh",
+    "Domhnall",
+    "Eachann",
+    "Coinneach",
+    "Murchadh",
+    "Donnchadh"
+};
+
+INameTokenizer gaelicTokenizer = new GreedyNameTokenizer(new[]
+{
+    "mac",
+    "mh",
+    "dh",
+    "ch",
+    "gh",
+    "ae",
+    "ai",
+    "eo",
+    "io",
+    "ua",
+    "nn",
+    "ll"
+});
+
+TokenMarkovNameTrainer tokenTrainer = new TokenMarkovNameTrainer(
+    order: 2,
+    tokenizer: gaelicTokenizer);
+
+TokenMarkovNameModel tokenModel = tokenTrainer.Train(gaelicInspiredNames);
+
+TokenMarkovNameGenerator tokenGenerator = new TokenMarkovNameGenerator(
+    tokenModel,
+    seed: 54321);
+
+NameGenerationOptions tokenOptions = new NameGenerationOptions
+{
+    MinLength = 4,
+    MaxLength = 14,
+    AvoidTrainingDuplicates = true,
+    MaxAttempts = 1000,
+    MaxConsecutiveIdenticalCharacters = 2
+};
+
+IReadOnlyList<string> tokenNames = tokenGenerator.GenerateMany(
+    count: 20,
+    options: tokenOptions);
+
+foreach (string name in tokenNames)
+{
+    Console.WriteLine(name);
+}
+
+Console.WriteLine();
+Console.WriteLine("Character-based comparison:");
+
+MarkovNameTrainer characterTrainer = new MarkovNameTrainer(order: 2);
+MarkovNameModel characterModel = characterTrainer.Train(gaelicInspiredNames);
+MarkovNameGenerator characterGenerator = new MarkovNameGenerator(characterModel, seed: 54321);
+
+IReadOnlyList<string> characterNames = characterGenerator.GenerateMany(
+    count: 20,
+    options: tokenOptions);
+
+foreach (string name in characterNames)
+{
+    Console.WriteLine(name);
+}
