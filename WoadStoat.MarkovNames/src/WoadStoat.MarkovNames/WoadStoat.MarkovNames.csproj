@@ -12,6 +12,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <NoWarn>$(NoWarn);1591</NoWarn>
 
+    <PackageIcon>icon.png</PackageIcon>
     <PackageId>WoadStoat.MarkovNames</PackageId>
     <Product>WoadStoat.MarkovNames</Product>
     <Title>WoadStoat.MarkovNames</Title>
@@ -37,6 +38,8 @@
   <ItemGroup>
     <None Include="../../../README.md" Pack="true" PackagePath="/" />
     <None Include="../../../LICENSE" Pack="true" PackagePath="/" />
+    <None Include="../../../RELEASE_NOTES.md" Pack="true" PackagePath="/" />
+    <None Include="../../../icon.png" Pack="true" PackagePath="/" />
   </ItemGroup>
 
   <ItemGroup>
