@@ -21,7 +21,7 @@ jobs:
       CONFIGURATION: Release
       PACKAGE_OUTPUT: artifacts/packages
       PROJECT_PATH: src/WoadStoat.MarkovNames/WoadStoat.MarkovNames.csproj
-      SOLUTION_PATH: WoadStoat.MarkovNames.slnx
+      SOLUTION_PATH: WoadStoat.MarkovNames/WoadStoat.MarkovNames.slnx
 
     steps:
       - name: Checkout repository
