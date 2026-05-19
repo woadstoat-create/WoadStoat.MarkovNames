@@ -22,15 +22,12 @@ public static class NameCultureProfileJsonLoader
 
         string json = File.ReadAllText(filePath);
 
-        NameCultureProfileData? data =
-            JsonSerializer.Deserialize<NameCultureProfileData>(json, JsonOptions);
+        return LoadProfileDataFromJson(json, filePath);
+    }
 
-        if (data == null)
-            throw new InvalidOperationException($"Failed to load culture profile from '{filePath}'.");
-
-        ValidateProfileData(data);
-
-        return data;
+    public static NameCultureProfileData LoadProfileDataFromJson(string json)
+    {
+        return LoadProfileDataFromJson(json, "JSON string");
     }
 
     public static NameCultureProfileSetData LoadProfileSetData(string filePath)
@@ -40,21 +37,12 @@ public static class NameCultureProfileJsonLoader
 
         string json = File.ReadAllText(filePath);
 
-        NameCultureProfileSetData? data =
-            JsonSerializer.Deserialize<NameCultureProfileSetData>(json, JsonOptions);
+        return LoadProfileSetDataFromJson(json, filePath);
+    }
 
-        if (data == null)
-            throw new InvalidOperationException($"Failed to load culture profile set from '{filePath}'.");
-
-        if (data.Profiles == null || data.Profiles.Count == 0)
-            throw new InvalidOperationException("Profile set must contain at least one profile.");
-
-        foreach (NameCultureProfileData profile in data.Profiles)
-        {
-            ValidateProfileData(profile);
-        }
-
-        return data;
+    public static NameCultureProfileSetData LoadProfileSetDataFromJson(string json)
+    {
+        return LoadProfileSetDataFromJson(json, "JSON string");
     }
 
     public static NameCultureProfile ToProfile(NameCultureProfileData data)
@@ -87,14 +75,73 @@ public static class NameCultureProfileJsonLoader
     public static NameModelLibrary TrainCharacterLibraryFromProfileFile(string filePath)
     {
         NameCultureProfileData data = LoadProfileData(filePath);
-        NameCultureProfile profile = ToProfile(data);
 
-        return NameModelLibrary.Train(profile, data.Order);
+        return TrainCharacterLibraryFromProfileData(data);
+    }
+
+    public static NameModelLibrary TrainCharacterLibraryFromProfileJson(string json)
+    {
+        NameCultureProfileData data = LoadProfileDataFromJson(json);
+
+        return TrainCharacterLibraryFromProfileData(data);
     }
 
     public static NameModelLibrary TrainCharacterLibraryFromProfileSetFile(string filePath)
     {
         NameCultureProfileSetData setData = LoadProfileSetData(filePath);
+
+        return TrainCharacterLibraryFromProfileSetData(setData);
+    }
+
+    public static NameModelLibrary TrainCharacterLibraryFromProfileSetJson(string json)
+    {
+        NameCultureProfileSetData setData = LoadProfileSetDataFromJson(json);
+
+        return TrainCharacterLibraryFromProfileSetData(setData);
+    }
+
+    public static TokenNameModelLibrary TrainTokenLibraryFromProfileFile(string filePath)
+    {
+        NameCultureProfileData data = LoadProfileData(filePath);
+
+        return TrainTokenLibraryFromProfileData(data);
+    }
+
+    public static TokenNameModelLibrary TrainTokenLibraryFromProfileJson(string json)
+    {
+        NameCultureProfileData data = LoadProfileDataFromJson(json);
+
+        return TrainTokenLibraryFromProfileData(data);
+    }
+
+    public static TokenNameModelLibrary TrainTokenLibraryFromProfileSetFile(string filePath)
+    {
+        NameCultureProfileSetData setData = LoadProfileSetData(filePath);
+
+        return TrainTokenLibraryFromProfileSetData(setData);
+    }
+
+    public static TokenNameModelLibrary TrainTokenLibraryFromProfileSetJson(string json)
+    {
+        NameCultureProfileSetData setData = LoadProfileSetDataFromJson(json);
+
+        return TrainTokenLibraryFromProfileSetData(setData);
+    }
+
+    public static NameModelLibrary TrainCharacterLibraryFromProfileData(
+        NameCultureProfileData data)
+    {
+        ValidateProfileData(data);
+
+        NameCultureProfile profile = ToProfile(data);
+
+        return NameModelLibrary.Train(profile, data.Order);
+    }
+
+    public static NameModelLibrary TrainCharacterLibraryFromProfileSetData(
+        NameCultureProfileSetData setData)
+    {
+        ValidateProfileSetData(setData);
 
         int order = GetSharedOrder(setData.Profiles);
 
@@ -105,9 +152,11 @@ public static class NameCultureProfileJsonLoader
         return NameModelLibrary.TrainMany(profiles, order);
     }
 
-    public static TokenNameModelLibrary TrainTokenLibraryFromProfileFile(string filePath)
+    public static TokenNameModelLibrary TrainTokenLibraryFromProfileData(
+        NameCultureProfileData data)
     {
-        NameCultureProfileData data = LoadProfileData(filePath);
+        ValidateProfileData(data);
+
         NameCultureProfile profile = ToProfile(data);
         INameTokenizer tokenizer = CreateTokenizer(data);
 
@@ -117,9 +166,10 @@ public static class NameCultureProfileJsonLoader
         return library;
     }
 
-    public static TokenNameModelLibrary TrainTokenLibraryFromProfileSetFile(string filePath)
+    public static TokenNameModelLibrary TrainTokenLibraryFromProfileSetData(
+        NameCultureProfileSetData setData)
     {
-        NameCultureProfileSetData setData = LoadProfileSetData(filePath);
+        ValidateProfileSetData(setData);
 
         int order = GetSharedOrder(setData.Profiles);
 
@@ -134,6 +184,78 @@ public static class NameCultureProfileJsonLoader
         }
 
         return library;
+    }
+
+    private static NameCultureProfileData LoadProfileDataFromJson(
+        string json,
+        string sourceDescription)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            throw new ArgumentException("JSON cannot be null, empty, or whitespace.", nameof(json));
+
+        NameCultureProfileData? data;
+
+        try
+        {
+            data = JsonSerializer.Deserialize<NameCultureProfileData>(json, JsonOptions);
+        }
+        catch (JsonException exception)
+        {
+            throw new InvalidOperationException(
+                $"Failed to parse culture profile JSON from {sourceDescription}.",
+                exception);
+        }
+
+        if (data == null)
+            throw new InvalidOperationException(
+                $"Failed to load culture profile from {sourceDescription}.");
+
+        ValidateProfileData(data);
+
+        return data;
+    }
+
+    private static NameCultureProfileSetData LoadProfileSetDataFromJson(
+        string json,
+        string sourceDescription)
+    {
+        if (string.IsNullOrWhiteSpace(json))
+            throw new ArgumentException("JSON cannot be null, empty, or whitespace.", nameof(json));
+
+        NameCultureProfileSetData? data;
+
+        try
+        {
+            data = JsonSerializer.Deserialize<NameCultureProfileSetData>(json, JsonOptions);
+        }
+        catch (JsonException exception)
+        {
+            throw new InvalidOperationException(
+                $"Failed to parse culture profile set JSON from {sourceDescription}.",
+                exception);
+        }
+
+        if (data == null)
+            throw new InvalidOperationException(
+                $"Failed to load culture profile set from {sourceDescription}.");
+
+        ValidateProfileSetData(data);
+
+        return data;
+    }
+
+    private static void ValidateProfileSetData(NameCultureProfileSetData data)
+    {
+        if (data == null)
+            throw new ArgumentNullException(nameof(data));
+
+        if (data.Profiles == null || data.Profiles.Count == 0)
+            throw new InvalidOperationException("Profile set must contain at least one profile.");
+
+        foreach (NameCultureProfileData profile in data.Profiles)
+        {
+            ValidateProfileData(profile);
+        }
     }
 
     private static int GetSharedOrder(IEnumerable<NameCultureProfileData> profiles)
@@ -171,18 +293,24 @@ public static class NameCultureProfileJsonLoader
         foreach (KeyValuePair<string, List<string>> category in data.Categories)
         {
             if (string.IsNullOrWhiteSpace(category.Key))
+            {
                 throw new InvalidOperationException(
                     $"Culture profile '{data.CultureKey}' contains an empty category key.");
+            }
 
             if (category.Value == null || category.Value.Count == 0)
+            {
                 throw new InvalidOperationException(
                     $"Culture profile '{data.CultureKey}' category '{category.Key}' must contain at least one sample.");
+            }
 
             bool hasValidSample = category.Value.Any(sample => !string.IsNullOrWhiteSpace(sample));
 
             if (!hasValidSample)
+            {
                 throw new InvalidOperationException(
                     $"Culture profile '{data.CultureKey}' category '{category.Key}' must contain at least one valid sample.");
+            }
         }
     }
 }
