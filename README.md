@@ -636,3 +636,11 @@ Future improvements may include:
 - model serialisation for token-based libraries
 - improved suffix generation
 - Unity and MonoGame sample projects
+
+## Documentation
+
+Additional documentation:
+
+- [JSON Profile Format](docs/json-profile-format.md)
+- [Tokenisation](docs/tokenisation.md)
+- [Generation Options](docs/generation-options.md)

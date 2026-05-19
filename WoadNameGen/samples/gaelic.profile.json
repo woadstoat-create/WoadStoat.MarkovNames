@@ -1,0 +1,54 @@
+{
+  "cultureKey": "gaelic",
+  "order": 2,
+  "useTokens": true,
+  "tokens": [
+    "mac",
+    "mc",
+    "mh",
+    "dh",
+    "ch",
+    "gh",
+    "ae",
+    "ai",
+    "eo",
+    "io",
+    "ua",
+    "nn",
+    "ll"
+  ],
+  "categories": {
+    "people": [
+      "Aedan",
+      "Caelan",
+      "Eoghan",
+      "Ruairidh",
+      "Fionnlagh",
+      "Domhnall",
+      "Eachann",
+      "Coinneach",
+      "Murchadh",
+      "Donnchadh"
+    ],
+    "clans": [
+      "MacLeod",
+      "MacDonald",
+      "MacKenzie",
+      "MacGregor",
+      "MacArthur",
+      "MacNab",
+      "MacPherson",
+      "MacMillan"
+    ],
+    "places": [
+      "Inverness",
+      "Dunblane",
+      "Aviemore",
+      "Callander",
+      "Mallaig",
+      "Tobermory",
+      "Dunfermline",
+      "Kilmarnock"
+    ]
+  }
+}

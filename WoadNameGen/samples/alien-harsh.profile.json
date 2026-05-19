@@ -1,0 +1,46 @@
+{
+  "cultureKey": "alien-harsh",
+  "order": 2,
+  "useTokens": true,
+  "tokens": [
+    "kh",
+    "zh",
+    "xq",
+    "vr",
+    "sk",
+    "th",
+    "aa",
+    "uun"
+  ],
+  "categories": {
+    "people": [
+      "Khara",
+      "Zhakar",
+      "Vrekth",
+      "Skoraan",
+      "Xqaal",
+      "Tharuun",
+      "Khozha",
+      "Vraask",
+      "Zhuun",
+      "Kharuun"
+    ],
+    "places": [
+      "Kharax",
+      "Zhuunor",
+      "Vrekshal",
+      "Skathuun",
+      "Xqorath",
+      "Tharax",
+      "Khozhaan",
+      "Vraskuun"
+    ],
+    "factions": [
+      "Khar Dominion",
+      "Zha Collective",
+      "Vrekh Accord",
+      "Skoraan Host",
+      "Xqaal Synod"
+    ]
+  }
+}
