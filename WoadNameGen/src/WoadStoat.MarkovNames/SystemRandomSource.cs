@@ -1,0 +1,21 @@
+namespace WoadStoat.MarkovNames;
+
+public sealed class SystemRandomSource : IRandomSource
+{
+    private readonly Random _random;
+
+    public SystemRandomSource()
+    {
+        _random = new Random();
+    }
+
+    public SystemRandomSource(int seed)
+    {
+        _random = new Random(seed);
+    }
+
+    public int NextInt(int minInclusive, int maxExclusive)
+    {
+        return _random.Next(minInclusive, maxExclusive);
+    }
+}

@@ -1,6 +1,6 @@
 # JSON Profile Format
 
-WoadNameGen can train name libraries from JSON culture profiles.
+WoadStoat.MarkovNames can train name libraries from JSON culture profiles.
 
 A profile describes:
 

@@ -1,6 +1,6 @@
 # Tokenisation
 
-WoadNameGen supports both character-based and token-based generation.
+WoadStoat.MarkovNames supports both character-based and token-based generation.
 
 ---
 

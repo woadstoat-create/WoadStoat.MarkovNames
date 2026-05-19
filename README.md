@@ -1,6 +1,6 @@
-# WoadNameGen
+# WoadStoat.MarkovNames
 
-WoadNameGen is an engine-agnostic C# library for procedural name generation using Markov chains.
+WoadStoat.MarkovNames is an engine-agnostic C# library for procedural name generation using Markov chains.
 
 It can generate:
 
@@ -46,7 +46,7 @@ It works with:
 ## Quick Start
 
 ```csharp
-using WoadNameGen;
+using WoadStoat.MarkovNames;
 
 string[] names =
 {
@@ -97,7 +97,7 @@ foreach (string generatedName in generatedNames)
 
 ## Deterministic Generation
 
-WoadNameGen supports seeded generation.
+WoadStoat.MarkovNames supports seeded generation.
 
 This means the same training data and same seed will produce the same sequence of names.
 
@@ -447,13 +447,13 @@ TokenNameModelLibrary library =
 
 ## Unity Usage
 
-WoadNameGen does not depend on Unity.
+WoadStoat.MarkovNames does not depend on Unity.
 
 You can load a JSON profile through a `TextAsset`.
 
 ```csharp
 using UnityEngine;
-using WoadNameGen;
+using WoadStoat.MarkovNames;
 
 public sealed class NameGeneratorExample : MonoBehaviour
 {
@@ -483,12 +483,12 @@ public sealed class NameGeneratorExample : MonoBehaviour
 
 ## MonoGame Usage
 
-WoadNameGen does not depend on MonoGame.
+WoadStoat.MarkovNames does not depend on MonoGame.
 
 You can use it during startup, world generation, or content loading.
 
 ```csharp
-using WoadNameGen;
+using WoadStoat.MarkovNames;
 
 public sealed class WorldNameService
 {
@@ -523,17 +523,17 @@ public sealed class WorldNameService
 After packing the project locally, install it into another project with:
 
 ```bash
-dotnet add package WoadStoat.WoadNameGen \
+dotnet add package WoadStoat.WoadStoat.MarkovNames \
   --version 0.1.0 \
-  --source /path/to/WoadNameGen/artifacts/packages
+  --source /path/to/WoadStoat.MarkovNames/artifacts/packages
 ```
 
 Example:
 
 ```bash
-dotnet add package WoadStoat.WoadNameGen \
+dotnet add package WoadStoat.WoadStoat.MarkovNames \
   --version 0.1.0 \
-  --source /workspaces/WoadNameGen/WoadNameGen/artifacts/packages
+  --source /workspaces/WoadStoat.MarkovNames/WoadStoat.MarkovNames/artifacts/packages
 ```
 
 ---
@@ -541,7 +541,7 @@ dotnet add package WoadStoat.WoadNameGen \
 ## Running the Console Example
 
 ```bash
-dotnet run --project examples/WoadNameGen.ConsoleExample
+dotnet run --project examples/WoadStoat.MarkovNames.ConsoleExample
 ```
 
 ---
@@ -568,7 +568,7 @@ Create the package:
 
 ```bash
 mkdir -p artifacts/packages
-dotnet pack src/WoadNameGen/WoadNameGen.csproj -c Release -o artifacts/packages
+dotnet pack src/WoadStoat.MarkovNames/WoadStoat.MarkovNames.csproj -c Release -o artifacts/packages
 ```
 
 The package will be created under:
@@ -580,8 +580,8 @@ artifacts/packages/
 Expected files:
 
 ```text
-WoadStoat.WoadNameGen.0.1.0.nupkg
-WoadStoat.WoadNameGen.0.1.0.snupkg
+WoadStoat.WoadStoat.MarkovNames.0.1.0.nupkg
+WoadStoat.WoadStoat.MarkovNames.0.1.0.snupkg
 ```
 
 The `.nupkg` file is the actual NuGet package.
@@ -595,23 +595,23 @@ The `.snupkg` file is the symbols package, useful for debugging.
 Create a test project:
 
 ```bash
-mkdir WoadNameGenPackageTest
-cd WoadNameGenPackageTest
+mkdir WoadStoat.MarkovNamesPackageTest
+cd WoadStoat.MarkovNamesPackageTest
 dotnet new console
 ```
 
 Install the local package:
 
 ```bash
-dotnet add package WoadStoat.WoadNameGen \
+dotnet add package WoadStoat.WoadStoat.MarkovNames \
   --version 0.1.0 \
-  --source /path/to/WoadNameGen/artifacts/packages
+  --source /path/to/WoadStoat.MarkovNames/artifacts/packages
 ```
 
 Example test program:
 
 ```csharp
-using WoadNameGen;
+using WoadStoat.MarkovNames;
 
 string[] samples =
 {
@@ -654,9 +654,9 @@ dotnet run
 ## Project Structure
 
 ```text
-WoadNameGen/
+WoadStoat.MarkovNames/
 ├── src/
-│   └── WoadNameGen/
+│   └── WoadStoat.MarkovNames/
 │       ├── MarkovNameTrainer.cs
 │       ├── MarkovNameModel.cs
 │       ├── MarkovNameGenerator.cs
@@ -669,10 +669,10 @@ WoadNameGen/
 │       └── NameCultureProfileJsonLoader.cs
 │
 ├── examples/
-│   └── WoadNameGen.ConsoleExample/
+│   └── WoadStoat.MarkovNames.ConsoleExample/
 │
 ├── tests/
-│   └── WoadNameGen.Tests/
+│   └── WoadStoat.MarkovNames.Tests/
 │
 ├── docs/
 │   ├── json-profile-format.md
@@ -742,15 +742,15 @@ factions: Red Company, Iron League
 
 Additional documentation:
 
-- [JSON Profile Format](WoadNameGen/docs/json-profile-format.md)
-- [Tokenisation](WoadNameGen/docs/tokenisation.md)
-- [Generation Options](WoadNameGen/docs/generation-options.md)
+- [JSON Profile Format](WoadStoat.MarkovNames/docs/json-profile-format.md)
+- [Tokenisation](WoadStoat.MarkovNames/docs/tokenisation.md)
+- [Generation Options](WoadStoat.MarkovNames/docs/generation-options.md)
 
 ---
 
 ## Current Status
 
-WoadNameGen currently supports:
+WoadStoat.MarkovNames currently supports:
 
 - character-based Markov generation
 - token-based Markov generation
