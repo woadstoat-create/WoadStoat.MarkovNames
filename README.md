@@ -1,6 +1,8 @@
 # WoadStoat.MarkovNames
 
 [![.NET Build and Test](https://github.com/woadstoat-create/WoadStoat.MarkovNames/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/woadstoat-create/WoadStoat.MarkovNames/actions/workflows/dotnet.yml)
+[![NuGet](https://img.shields.io/nuget/v/WoadStoat.MarkovNames.svg)](https://www.nuget.org/packages/WoadStoat.MarkovNames)
+[![NuGet Downloads](https://img.shields.io/nuget/dt/WoadStoat.MarkovNames.svg)](https://www.nuget.org/packages/WoadStoat.MarkovNames)
 
 WoadStoat.MarkovNames is an engine-agnostic C# library for procedural name generation using Markov chains.
 
