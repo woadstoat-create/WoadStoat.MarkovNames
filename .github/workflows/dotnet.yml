@@ -17,11 +17,11 @@ jobs:
     name: Build, Test, and Pack
     runs-on: ubuntu-latest
 
-  env:
-    CONFIGURATION: Release
-    PACKAGE_OUTPUT: artifacts/packages
-    PROJECT_PATH: WoadStoat.MarkovNames/src/WoadStoat.MarkovNames/WoadStoat.MarkovNames.csproj
-    SOLUTION_PATH: WoadStoat.MarkovNames.slnx
+    env:
+      CONFIGURATION: Release
+      PACKAGE_OUTPUT: artifacts/packages
+      PROJECT_PATH: WoadStoat.MarkovNames/src/WoadStoat.MarkovNames/WoadStoat.MarkovNames.csproj
+      SOLUTION_PATH: WoadStoat.MarkovNames.slnx
 
     steps:
       - name: Checkout repository
