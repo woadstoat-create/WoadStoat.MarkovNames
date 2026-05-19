@@ -447,6 +447,31 @@ TokenNameModelLibrary library =
 
 ---
 
+## Saving and Loading Trained Token Libraries
+
+Raw culture profile JSON is useful for editing training data.
+
+Trained model JSON is useful when you want to train once and load quickly later.
+
+```csharp
+using WoadStoat.MarkovNames;
+using WoadStoat.MarkovNames.Serialization;
+
+TokenNameModelLibrary library =
+    NameCultureProfileJsonLoader.TrainTokenLibraryFromProfileJson(profileJson);
+
+string trainedJson =
+    TokenNameModelJsonSerializer.LibraryToJson(library);
+
+TokenNameModelLibrary loaded =
+    TokenNameModelJsonSerializer.LibraryFromJson(trainedJson);
+
+string name = loaded.Generate(
+    "gaelic",
+    "clans",
+    seed: 12345);
+```
+
 ## Unity Usage
 
 WoadStoat.MarkovNames does not depend on Unity.

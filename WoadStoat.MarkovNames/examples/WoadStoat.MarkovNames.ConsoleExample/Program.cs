@@ -592,3 +592,24 @@ foreach (string cultureKey in profileSetLibrary.CultureKeys)
         Console.WriteLine($"  Category: {categoryKey}");
     }
 }
+
+Console.WriteLine();
+Console.WriteLine("Token model serialization example:");
+
+string trainedTokenLibraryJson =
+    TokenNameModelJsonSerializer.LibraryToJson(gaelicTokenLibrary);
+
+TokenNameModelLibrary loadedTokenLibrary =
+    TokenNameModelJsonSerializer.LibraryFromJson(trainedTokenLibraryJson);
+
+IReadOnlyList<string> loadedTokenNames = loadedTokenLibrary.GenerateMany(
+    "gaelic",
+    "clans",
+    count: 10,
+    seed: 2026,
+    macDataFileOptions);
+
+foreach (string name in loadedTokenNames)
+{
+    Console.WriteLine(name);
+}
